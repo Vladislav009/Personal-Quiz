@@ -23,15 +23,24 @@ class ResultsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setUpUI()
+        calculateResult()
+    }
+}
+
+extension ResultsViewController {
+    private func setUpUI() {
         navigationItem.setHidesBackButton(true, animated: true)
-        
+    }
+    
+    private func calculateResult(){
         if let answers = userAnswers {
             for answer in answers {
                 typeAnimals.append(answer.type)
             }
         }
-
-       let dups = Dictionary(grouping: typeAnimals, by: {$0}).filter { $1.count > 1 }.keys
+        
+        let dups = Dictionary(grouping: typeAnimals, by: {$0}).filter { $1.count > 1 }.keys
         
         if let resultTitle = dups.first {
             resultTitleLabel.text = "Вы - \(resultTitle.rawValue)!"
