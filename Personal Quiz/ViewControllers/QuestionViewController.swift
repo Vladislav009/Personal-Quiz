@@ -9,7 +9,7 @@
 import UIKit
 
 class QuestionViewController: UIViewController {
-
+    
     @IBOutlet weak var questionLabel: UILabel!
     
     @IBOutlet weak var singleStackView: UIStackView!
@@ -34,7 +34,7 @@ class QuestionViewController: UIViewController {
     
     private let questions = Question.getQuestions()
     private var questionIndex = 0
-    private var currenrAnswers: [Answer] {
+    public var currenrAnswers: [Answer] {
         questions[questionIndex].answers
     }
     private var answersChooser: [Answer] = []
@@ -43,7 +43,13 @@ class QuestionViewController: UIViewController {
         super.viewDidLoad()
         setupUI()
     }
- 
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destination = segue.destination as? ResultsViewController else { return }
+        destination.userAnswers = answersChooser
+        
+    }
+    
     @IBAction func singleAnnserButtonBressed(_ sender: UIButton) {
         guard let buttonIndex = singleButtons.firstIndex(of: sender) else { return }
         let currentAnswer = currenrAnswers[buttonIndex]
@@ -112,7 +118,7 @@ extension QuestionViewController {
             return
         }
         
-        performSegue(withIdentifier: "resultSegue", sender: nil)
+        performSegue(withIdentifier: "resultSegue", sender: answersChooser)
     }
     
     private func showMultipleStackView(with answers: [Answer]) {

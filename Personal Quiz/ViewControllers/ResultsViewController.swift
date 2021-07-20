@@ -14,12 +14,28 @@ class ResultsViewController: UIViewController {
     // 3. Отобразить результат в соответсвии с этим животным
     // 4. Избавиться от кнопки возврата назад на экране результатов
     
+    @IBOutlet weak var resultTitleLabel: UILabel!
+    @IBOutlet weak var resultDescriptionLabel: UILabel!
     
+    var userAnswers: [Answer]!
+    var typeAnimals: [AnimalType] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
+        navigationItem.setHidesBackButton(true, animated: true)
+        
+        if let answers = userAnswers {
+            for answer in answers {
+                typeAnimals.append(answer.type)
+            }
+        }
+
+       let dups = Dictionary(grouping: typeAnimals, by: {$0}).filter { $1.count > 1 }.keys
+        
+        if let resultTitle = dups.first {
+            resultTitleLabel.text = "Вы - \(resultTitle.rawValue)!"
+            resultDescriptionLabel.text = resultTitle.definition
+        }
     }
-    
 }
